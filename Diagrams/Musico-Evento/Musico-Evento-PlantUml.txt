@@ -1,0 +1,64 @@
+@startuml
+abstract class Musico{
+    + nombre : String
+    + edad : int
+    + getNombre(): String
+    + tocarInstrumento() : void
+    + afinar() : void
+    + presentarse(): String
+}
+
+class Instrumentista {
+    + instrumento: Instrumento
+    + calidad: int
+    + tocar(): void
+    + afinar(): void
+    + getInstrumento(): Instrumento
+}
+
+class Instrumento{
+ + nombre : String
+ + tipo : TipoInstrumento
+ + marca: String
+ + getNombre(): String 
+ + getTipo(): Instrumento 
+}
+
+class Cantante {
+ + tessitura: String
+ + tocar(): void 
+ + afinar(): void
+}
+
+interface Ejecutar{
++ tocar(): void 
++ afinar(): void
+}
+
+class Agrupacion {
++ nombre: String
++ genero: String
++ miembros: List<Musico>
++ agregarMiembro(m: Musico)
++ retirarMiembro(m: Musico)
++ getMusicos(): List<Musico>
+}
+
+class Evento{
++ lugar: String
++ fecha: String
++ entretenimiento: Agrupacion
++ aforo: int
++ registrarAgrupacion(A: Agrupacion)
++ cancelarEvento(): void
++ getFecha(): LocalDate
++ getLugar(): String
+} 
+
+Musico <|-- Cantante 
+Musico <|-- Instrumentista
+Ejecutar <|.. Musico
+Agrupacion o-- Musico
+Instrumentista o-- Instrumento
+Agrupacion *-- Evento
+@enduml
