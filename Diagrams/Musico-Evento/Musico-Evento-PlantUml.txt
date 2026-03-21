@@ -1,64 +1,143 @@
 @startuml
-abstract class Musico{
-    + nombre : String
-    + edad : int
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+}
+
+' ─── INTERFACES ───────────────────────────────────────────
+interface Ejecutar {
+    + tocar(): void
+    + afinar(): void
+}
+
+' ─── ENUMS ────────────────────────────────────────────────
+enum TipoInstrumento {
+    CUERDA
+    VIENTO
+    PERCUSION
+    TECLADO
+}
+
+' ─── CLASES MODELO ────────────────────────────────────────
+abstract class Musico {
+    # nombre: String
+    # edad: int
     + getNombre(): String
-    + tocarInstrumento() : void
-    + afinar() : void
+    + getEdad(): int
+    + presentarse(): String
+}
+
+class Cantante {
+    - tessitura: String
+    + getTessitura(): String
+    + tocar(): void
+    + afinar(): void
     + presentarse(): String
 }
 
 class Instrumentista {
-    + instrumento: Instrumento
-    + calidad: int
+    - instrumento: Instrumento
+    - calidad: int
+    + getInstrumento(): Instrumento
+    + getCalidad(): int
     + tocar(): void
     + afinar(): void
-    + getInstrumento(): Instrumento
+    + presentarse(): String
 }
 
-class Instrumento{
- + nombre : String
- + tipo : TipoInstrumento
- + marca: String
- + getNombre(): String 
- + getTipo(): Instrumento 
-}
-
-class Cantante {
- + tessitura: String
- + tocar(): void 
- + afinar(): void
-}
-
-interface Ejecutar{
-+ tocar(): void 
-+ afinar(): void
+class Instrumento {
+    - nombre: String
+    - tipo: TipoInstrumento
+    - marca: String
+    + getNombre(): String
+    + getTipo(): TipoInstrumento
+    + getMarca(): String
 }
 
 class Agrupacion {
-+ nombre: String
-+ genero: String
-+ miembros: List<Musico>
-+ agregarMiembro(m: Musico)
-+ retirarMiembro(m: Musico)
-+ getMusicos(): List<Musico>
+    - nombre: String
+    - genero: String
+    - miembros: List<Musico>
+    + agregarMiembro(m: Musico): void
+    + retirarMiembro(m: Musico): void
+    + getMusicos(): List<Musico>
+    + getNombre(): String
+    + getGenero(): String
 }
 
-class Evento{
-+ lugar: String
-+ fecha: String
-+ entretenimiento: Agrupacion
-+ aforo: int
-+ registrarAgrupacion(A: Agrupacion)
-+ cancelarEvento(): void
-+ getFecha(): LocalDate
-+ getLugar(): String
-} 
+class Evento {
+    - lugar: String
+    - fecha: LocalDate
+    - entretenimiento: Agrupacion
+    - aforo: int
+    - cancelado: boolean
+    + registrarAgrupacion(a: Agrupacion): void
+    + cancelarEvento(): void
+    + getFecha(): LocalDate
+    + getLugar(): String
+    + getAforo(): int
+    + isCancelado(): boolean
+}
 
-Musico <|-- Cantante 
-Musico <|-- Instrumentista
+' ─── FACTORY PATTERN ──────────────────────────────────────
+class InstrumentoFactory <<Factory>> {
+    - {static} CATALOGO: Object[][]
+    - {static} RANDOM: Random
+    + {static} crear(nombre: String, tipo: TipoInstrumento, marca: String): Instrumento
+    + {static} crearAleatorio(): Instrumento
+}
+
+class MusicoFactory <<Factory>> {
+    - {static} NOMBRES: String[]
+    - {static} TESSITURAS: String[]
+    - {static} RANDOM: Random
+    + {static} crearCantante(nombre: String, edad: int, tessitura: String): Cantante
+    + {static} crearInstrumentista(nombre: String, edad: int, instrumento: Instrumento, calidad: int): Instrumentista
+    + {static} crearAleatorio(): Musico
+}
+
+' ─── SINGLETON PATTERN ────────────────────────────────────
+class AgrupacionManager <<Singleton>> {
+    - {static} INSTANCIA: AgrupacionManager
+    - agrupaciones: List<Agrupacion>
+    - AgrupacionManager()
+    + {static} getInstance(): AgrupacionManager
+    + registrar(a: Agrupacion): void
+    + buscarPorNombre(nombre: String): Agrupacion
+    + getAgrupaciones(): List<Agrupacion>
+    + mostrarResumen(): void
+}
+
+' ─── RELACIONES ───────────────────────────────────────────
+
+' Realización (interface)
 Ejecutar <|.. Musico
+
+' Herencia
+Musico <|-- Cantante
+Musico <|-- Instrumentista
+
+' Agregación: Agrupacion contiene Musicos (polimórfico)
 Agrupacion o-- Musico
+
+' Agregación: Instrumentista usa Instrumento
 Instrumentista o-- Instrumento
-Agrupacion *-- Evento
+
+' Agregación: Evento referencia Agrupacion
+Evento o-- Agrupacion
+
+' Dependencia: Instrumento usa TipoInstrumento
+Instrumento ..> TipoInstrumento
+
+' Dependencias Factory (crean instancias)
+InstrumentoFactory ..> Instrumento : «creates»
+MusicoFactory ..> Cantante : «creates»
+MusicoFactory ..> Instrumentista : «creates»
+MusicoFactory ..> InstrumentoFactory : «uses»
+
+' Dependencia Singleton
+AgrupacionManager ..> Agrupacion : «manages»
+
 @enduml
