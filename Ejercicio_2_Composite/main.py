@@ -31,7 +31,7 @@ class OperatorNode(Expression):
     def evaluate(self) -> float:
         left_val = self.left.evaluate()
         right_val = self.right.evaluate()
-        if right_val == 0:
+        if right_val == 0 and self.op == '/':
             raise ValueError(f"0 division not supported")
         return self.OPERATORS[self.op](left_val, right_val)
 
