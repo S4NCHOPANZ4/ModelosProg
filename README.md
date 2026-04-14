@@ -1,4 +1,4 @@
-# Proyectos Modelos de programacion
+# Proyectos Modelos de Programación
 
 Participantes grupo:
 - Juan David Buitrago - 20242020194
@@ -80,12 +80,13 @@ Agrupacion o-- Musico
 Evento --* Agrupacion
 
 ```
-## 2. Composite - Arbol de Operaciones
+## 2. Composite - Árbol de Operaciones
 
 ```mermaid
 classDiagram
 
-class Expression <<abstract>>{
+class Expression {
+  <<abstract>>
   +evaluate(): float
 }
 
