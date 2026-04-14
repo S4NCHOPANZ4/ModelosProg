@@ -1,8 +1,10 @@
-﻿# Modelado De Grupo Musical
+# Proyectos Modelos de programacion
 
 Participantes grupo:
 - Juan David Buitrago - 20242020194
 - Andrés Felipe Preciado Castilla - 20241020158
+
+## 1. Modelado De Grupo Musical
 
 ```mermaid
 classDiagram
@@ -78,5 +80,36 @@ Agrupacion o-- Musico
 Evento --* Agrupacion
 
 ```
+## 2. Composite - Arbol de Operaciones
 
+```mermaid
+classDiagram
+
+class Expression <<abstract>>{
+  +evaluate(): float
+}
+
+class NodeNum{
+    +value: float
+    +init(value: float)
+    +evaluate(): float
+}
+
+class OperatorNode{
+    +OPERATORS : dict
+    +op : str
+    +left : Expression
+    +right : Expression
+    +init(op: str, left: Expression, right: Expression)
+    +evaluate() : float
+}
+
+%%Relaciones
+Expression <|-- NodeNum : es un
+Expression <|-- OperatorNode : es un
+
+Expression --o OperatorNode : left
+Expression --o OperatorNode : right
+
+```
 
