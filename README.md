@@ -87,7 +87,7 @@ classDiagram
 
 class Expression {
   <<abstract>>
-  +evaluate(): float
+  +evaluate(): float*
 }
 
 class NodeNum{
