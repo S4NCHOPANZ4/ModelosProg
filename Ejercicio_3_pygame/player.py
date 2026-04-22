@@ -1,30 +1,33 @@
-from config import Config
-from vector2 import Vector2
-from animationset import Animation
 import pygame
-
-from animationset import Animation
+from config import Config
+from animationset import Animation, ScaleDecorator, TintDecorator
 from state import IdleState, MoveState
+
 
 class Player:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-        self.animation = Animation("assets/player")
+        self.animation = ScaleDecorator(
+            Animation("assets/player")
+        )
+        # Ejemplo con tint encima:
+        # self.animation = TintDecorator(
+        #     ScaleDecorator(Animation("assets/player")),
+        #     color=(255, 0, 0, 80)
+        # )
 
         self.direction = "down"
         self.frame = 0
         self.timer = 0
 
-        self.speed = 200
+        self.speed = Config.PLAYER_SPEED
 
-        # State Pattern
         self.states = {
             "idle": IdleState(),
             "move": MoveState()
         }
-
         self.state = self.states["idle"]
 
     def change_state(self, new_state):
@@ -34,9 +37,7 @@ class Player:
 
     def update(self, direction, dt):
         self.state.update(self, dt, direction)
-
         # tp
-        from config import Config
         self.x %= Config.WIDTH
         self.y %= Config.HEIGHT
 
@@ -44,4 +45,21 @@ class Player:
         frames = self.animation.get(self.direction)
         self.frame = self.frame % len(frames)
         frame = frames[self.frame]
-        screen.blit(frame, (self.x, self.y))
+
+        w, h = frame.get_size()
+
+        x_offsets = [0]
+        if self.x < w:
+            x_offsets.append(Config.WIDTH)
+        elif self.x > Config.WIDTH - w:
+            x_offsets.append(-Config.WIDTH)
+
+        y_offsets = [0]
+        if self.y < h:
+            y_offsets.append(Config.HEIGHT)
+        elif self.y > Config.HEIGHT - h:
+            y_offsets.append(-Config.HEIGHT)
+
+        for ox in x_offsets:
+            for oy in y_offsets:
+                screen.blit(frame, (self.x + ox, self.y + oy))

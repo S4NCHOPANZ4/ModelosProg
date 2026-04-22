@@ -20,7 +20,7 @@ class MoveState(State):
         player.x += direction.x * player.speed * dt
         player.y += direction.y * player.speed * dt
 
-        # Dirección lógica
+        # Direccion
         if abs(direction.x) > abs(direction.y):
             player.direction = "right" if direction.x > 0 else "left"
         else:

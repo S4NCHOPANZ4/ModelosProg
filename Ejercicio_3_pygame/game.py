@@ -12,7 +12,7 @@ class Game:
         pygame.display.set_caption("Movimiento continuo")
 
         self.clock = pygame.time.Clock()
-        self.player = Player(400, 300)
+        self.player = Player(200, 100)
         self.input_handler = InputHandler()
 
         self.running = True
