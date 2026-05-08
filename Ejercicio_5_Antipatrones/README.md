@@ -1,6 +1,6 @@
 # Spooky Month Bot
 
-Bot de Twitter/X que tuitea diariamente cuántos días faltan para octubr y genera una barra de progreso visual y la publica como imagen. Durante octubre, celebra cada día del mes.
+Bot de Twitter que tuitea diariamente cuántos días faltan para octubr y genera una barra de progreso visual y la publica como imagen. Durante octubre, celebra cada día del mes.
 ---
 ## Requisitos
  
