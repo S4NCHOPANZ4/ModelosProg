@@ -1,0 +1,6 @@
+projectKey=steamlink-frontend
+serverUrl=http://localhost:9000
+serverVersion=26.5.0.122743
+dashboardUrl=http://localhost:9000/dashboard?id=steamlink-frontend
+ceTaskId=9d4d3299-edff-4d4f-8106-5bbdde9890f0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9d4d3299-edff-4d4f-8106-5bbdde9890f0
